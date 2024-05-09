@@ -5,7 +5,6 @@ var config = {
 	entry: {
 		...defaultConfig.entry(),
 		"editor/index": "./src/editor/index.js",
-		"frontend/index": "./src/frontend/index.js",
 	},
 };
 

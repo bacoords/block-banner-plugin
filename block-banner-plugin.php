@@ -24,6 +24,7 @@ namespace wpdev\block_banner_plugin;
  */
 function create_block_block_banner_plugin_block_init() {
 	register_block_type( __DIR__ . '/build/close-button' );
+	register_block_type( __DIR__ . '/build/banner-placeholder' );
 }
 add_action( 'init', __NAMESPACE__ . '\create_block_block_banner_plugin_block_init' );
 
@@ -51,25 +52,6 @@ add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_block_edito
 
 
 
-
-/**
- * Enqueue the frontend script.
- */
-function register_frontend_script() {
-	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/frontend/index.asset.php';
-
-	wp_register_script(
-		'wpdev-banner-frontend',
-		plugins_url( 'build/frontend/index.js', __FILE__ ),
-		$asset_file['dependencies'],
-		$asset_file['version'],
-		true
-	);
-}
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\register_frontend_script' );
-
-
-
 /**
  * Register the custom post type for the banner.
  */
@@ -82,34 +64,40 @@ function register_wpdev_banner_post_type() {
 				'core/group',
 				array(
 					'align'  => 'full',
-					'layout' => array(
-						'type'           => 'flex',
-						'flexWrap'       => 'nowrap',
-						'justifyContent' => 'space-between',
-					),
 					'style'  => array(
 						'spacing' => array(
-							'top'     => 'var:preset|spacing|xs',
-							'bottom'  => 'var:preset|spacing|xs',
-							'left'    => 'var:preset|spacing|xs',
-							'right'   => 'var:preset|spacing|xs',
+							'top'     => 'var:preset|spacing|20',
+							'bottom'  => 'var:preset|spacing|20',
 							'padding' => array(
-								'right'  => 'var:preset|spacing|xs',
-								'left'   => 'var:preset|spacing|xs',
-								'top'    => 'var:preset|spacing|xs',
-								'bottom' => 'var:preset|spacing|xs',
+								'top'    => 'var:preset|spacing|20',
+								'bottom' => 'var:preset|spacing|20',
 							),
 						),
 					),
+					'layout' => array( 'type' => 'constrained' ),
 				),
 				array(
 					array(
-						'core/paragraph',
+						'core/group',
 						array(
-							'placeholder' => 'Add your banner content here',
+							'align'  => 'wide',
+							'layout' => array(
+								'type'           => 'flex',
+								'flexWrap'       => 'nowrap',
+								'justifyContent' => 'space-between',
+							),
+						),
+						array(
+
+							array(
+								'core/paragraph',
+								array(
+									'placeholder' => 'Add your banner content here',
+								),
+							),
+							array( 'block-banner-plugin/close-button', array() ),
 						),
 					),
-					array( 'block-banner-plugin/close-button', array() ),
 				),
 			),
 		),
@@ -176,50 +164,7 @@ add_action( 'init', __NAMESPACE__ . '\register_wpdev_banner_post_type' );
 
 
 
-/**
- * Load the banner on the frontend.
- */
-function load_banner_on_frontend() {
 
-	$banner_query = wp_cache_get( 'wpdev_banner_query', 'wpdev_banner' );
-	if ( ! $banner_query ) {
-		$banner_query = new \WP_Query(
-			array(
-				'post_type'      => 'wpdev_banner',
-				'posts_per_page' => 1,
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'     => 'wpdev_banner_show_on',
-						'value'   => 'all',
-						'compare' => '=',
-					),
-				),
-			)
-		);
-		wp_cache_set( 'wpdev_banner_query', $banner_query, 'wpdev_banner', 60 * 60 );
-	}
-
-	if ( $banner_query->have_posts() ) {
-		while ( $banner_query->have_posts() ) {
-			$banner_query->the_post();
-			$banner            = get_the_content();
-			$banner            = apply_filters( 'the_content', $banner );
-			$banner            = str_replace( ']]>', ']]&gt;', $banner );
-			$banner            = do_blocks( $banner );
-			$cookie_name       = 'wpdev_banner_' . get_the_ID();
-			$cookie_expiration = get_post_meta( get_the_ID(), 'wpdev_banner_cookie_expiration', true );
-		}
-		wp_reset_postdata();
-	}
-
-	if ( $banner ) {
-			wp_enqueue_script( 'wpdev-banner-frontend' );
-			echo '<aside class="block-banner-plugin" data-banner-cookie-name="' . esc_attr( $cookie_name ) . '" data-banner-cookie-expiration="' . esc_attr( $cookie_expiration ) . '" style="display:none">';
-			echo $banner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo '</aside>';
-	}
-}
-add_action( 'wp_footer', __NAMESPACE__ . '\load_banner_on_frontend' );
 
 
 /**
@@ -230,7 +175,7 @@ add_action( 'wp_footer', __NAMESPACE__ . '\load_banner_on_frontend' );
  * @return array
  */
 function remove_button_allowed_block_types( $allowed_blocks, $editor_context ) {
-	if ( 'wpdev_banner' !== $editor_context->post->post_type ) {
+	if ( isset( $editor_context->post ) && 'wpdev_banner' !== $editor_context->post->post_type ) {
 		unset( $allowed_blocks['block-banner-plugin/close-button'] );
 	}
 	return $allowed_blocks;

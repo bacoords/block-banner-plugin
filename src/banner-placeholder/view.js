@@ -1,4 +1,6 @@
-const banner = document.querySelector(".block-banner-plugin");
+const banner = document.querySelector(
+	".wp-block-block-banner-plugin-banner-placeholder",
+);
 
 if (banner) {
 	const cookieExpiration = banner.getAttribute("data-banner-cookie-expiration");
@@ -6,8 +8,6 @@ if (banner) {
 
 	const showBanner = () => {
 		// Add the banner to the top of the page.
-		const container = document.querySelector(".wp-site-blocks");
-		container.insertBefore(banner, container.firstChild);
 		banner.style.display = "block";
 
 		// Set the cookie.
@@ -42,6 +42,8 @@ if (banner) {
 		if (cookieValue !== "1") {
 			showBanner();
 		}
+	} else {
+		showBanner();
 	}
 
 	// Add an event listener to the close button.

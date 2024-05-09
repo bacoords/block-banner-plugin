@@ -1,16 +1,14 @@
 /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
-/*!*******************************!*\
-  !*** ./src/frontend/index.js ***!
-  \*******************************/
-const banner = document.querySelector(".block-banner-plugin");
+/*!****************************************!*\
+  !*** ./src/banner-placeholder/view.js ***!
+  \****************************************/
+const banner = document.querySelector(".wp-block-block-banner-plugin-banner-placeholder");
 if (banner) {
   const cookieExpiration = banner.getAttribute("data-banner-cookie-expiration");
   const cookieName = banner.getAttribute("data-banner-cookie-name");
   const showBanner = () => {
     // Add the banner to the top of the page.
-    const container = document.querySelector(".wp-site-blocks");
-    container.insertBefore(banner, container.firstChild);
     banner.style.display = "block";
 
     // Set the cookie.
@@ -34,6 +32,8 @@ if (banner) {
     if (cookieValue !== "1") {
       showBanner();
     }
+  } else {
+    showBanner();
   }
 
   // Add an event listener to the close button.
@@ -46,4 +46,4 @@ if (banner) {
 }
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=view.js.map

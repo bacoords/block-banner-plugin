@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Close Button",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "button",
 	"description": "Close button for banner plugin.",
 	"example": {},
 	"supports": {
