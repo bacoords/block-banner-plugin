@@ -5,6 +5,8 @@
 
 
 $banner_query = wp_cache_get( 'wpdev_banner_query', 'wpdev_banner' );
+$banner       = '';
+
 if ( ! $banner_query ) {
 	$banner_query = new \WP_Query(
 		array(
@@ -37,7 +39,7 @@ if ( $banner_query->have_posts() ) {
 ?>
 <div
 <?php
-echo get_block_wrapper_attributes(
+echo get_block_wrapper_attributes( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	array(
 		'data-banner-cookie-name'       => esc_attr( $cookie_name ),
 		'data-banner-cookie-expiration' => esc_attr( $cookie_expiration ),
@@ -46,5 +48,9 @@ echo get_block_wrapper_attributes(
 );
 ?>
 >
-	<?php echo $banner; // phpcs:ignore ?>
+	<?php
+	echo wp_kses_post(
+		$banner,
+	);
+	?>
 </div>

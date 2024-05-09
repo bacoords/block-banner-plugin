@@ -4,7 +4,6 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from "@wordpress/i18n";
-import { Icon, close } from "@wordpress/icons";
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -33,7 +32,6 @@ import "./editor.scss";
 export default function Edit() {
 	return (
 		<button {...useBlockProps()}>
-			<Icon icon={close} />
 			<span>{__("Close", "block-banner-plugin")}</span>
 		</button>
 	);

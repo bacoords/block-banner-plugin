@@ -6,7 +6,6 @@
  */
 import { useBlockProps } from "@wordpress/block-editor";
 import { __ } from "@wordpress/i18n";
-import { Icon, close } from "@wordpress/icons";
 
 /**
  * The save function defines the way in which the different attributes should
@@ -20,7 +19,6 @@ import { Icon, close } from "@wordpress/icons";
 export default function save() {
 	return (
 		<button {...useBlockProps.save()}>
-			<Icon icon={close} />
 			<span>{__("Close", "block-banner-plugin")}</span>
 		</button>
 	);
