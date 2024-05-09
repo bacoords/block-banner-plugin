@@ -221,6 +221,6 @@ add_action( 'manage_wpdev_banner_posts_custom_column', __NAMESPACE__ . '\show_co
  * Flush the cache when the banner is saved.
  */
 function flush_cache_on_save() {
-	wp_cache_delete( 'wpdev_banner', 'wpdev_banner' );
+	wp_cache_delete( 'wpdev_banner_query', 'wpdev_banner' );
 }
 add_action( 'save_post_wpdev_banner', __NAMESPACE__ . '\flush_cache_on_save' );
