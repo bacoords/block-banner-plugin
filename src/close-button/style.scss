@@ -1,0 +1,28 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-block-banner-plugin-close-button {
+	border: 0;
+	background-color: transparent;
+	cursor: pointer;
+	svg {
+		fill: currentColor;
+	}
+
+	span {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+		visibility: hidden;
+	}
+}
