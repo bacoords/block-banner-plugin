@@ -175,7 +175,7 @@ add_action( 'init', __NAMESPACE__ . '\register_wpdev_banner_post_type' );
  * @return array
  */
 function remove_button_allowed_block_types( $allowed_blocks, $editor_context ) {
-	if ( isset( $editor_context->post ) && 'wpdev_banner' !== $editor_context->post->post_type ) {
+	if ( isset( $editor_context->post ) && 'wpdev_banner' !== $editor_context->post->post_type && isset( $allowed_blocks['block-banner-plugin/close-button'] ) ) {
 		unset( $allowed_blocks['block-banner-plugin/close-button'] );
 	}
 	return $allowed_blocks;
